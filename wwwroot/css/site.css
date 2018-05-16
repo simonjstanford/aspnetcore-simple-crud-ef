@@ -1,0 +1,17 @@
+﻿th {
+    font-weight: normal;
+    color: gray;
+}
+
+th, td {
+    padding: 5px;
+}
+
+table, th, td {
+    border: 1px solid lightgray;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 10px 10px 20px 0px;
+}

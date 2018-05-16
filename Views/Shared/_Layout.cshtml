@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <title>_Layout</title>
+</head>
+<body>
+    <div>
+        @Html.ActionLink("Country", "Index", "Country") | 
+        @Html.ActionLink("Cities", "Index", "City")
+    </div>
+    <hr />
+
+    @RenderBody()
+
+    <hr />
+    <div>
+        @DateTime.Now
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+﻿@model GlobalCityManager.Models.Country
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h2>Details for @Model.Name</h2>
+
+<div>
+    @Html.DisplayNameFor(x => x.Code): @Html.DisplayTextFor(x => x.Code) <br />
+    @Html.DisplayNameFor(x => x.Name): @Html.DisplayTextFor(x => x.Name) <br />
+    @Html.DisplayNameFor(x => x.Region): @Html.DisplayTextFor(x => x.Region) <br />
+</div>
+
+<img src="@Model.NationalFlag" />
+
+<ul>
+    @foreach (var city in Model.City)
+    {
+        <li>@Html.ActionLink(city.Name, "Detail", "City")</li>
+    }
+</ul>
+
