@@ -8,5 +8,6 @@ namespace GlobalCityManager.Data
         IEnumerable<City> GetCities();
         IEnumerable<Country> GetCountries();
         Country GetCountryDetails(string code);
+        void CreateCountry(Country country);
     }
 }

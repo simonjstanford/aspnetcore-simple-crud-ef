@@ -33,5 +33,14 @@ namespace GlobalCityManager.Data
                 return details;
             }
         }
+
+        public void CreateCountry(Country country)
+        {
+            using (var context = new worldContext())
+            {
+                context.Country.Add(country);
+                context.SaveChanges();
+            }
+        }
     }
 }
