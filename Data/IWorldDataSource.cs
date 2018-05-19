@@ -9,5 +9,6 @@ namespace GlobalCityManager.Data
         IEnumerable<Country> GetCountries();
         Country GetCountryDetails(string code);
         void CreateCountry(Country country);
+        void UpdateCountry(Country country);
     }
 }

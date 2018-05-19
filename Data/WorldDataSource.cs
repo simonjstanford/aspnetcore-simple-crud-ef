@@ -42,5 +42,14 @@ namespace GlobalCityManager.Data
                 context.SaveChanges();
             }
         }
+
+        public void UpdateCountry(Country country)
+        {
+            using (var context = new worldContext())
+            {
+                context.Country.Update(country);
+                context.SaveChanges();
+            }
+        }
     }
 }

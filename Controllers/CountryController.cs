@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using GlobalCityManager.Data;
+﻿using GlobalCityManager.Data;
 using GlobalCityManager.Models;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +8,12 @@ namespace GlobalCityManager.Controllers
     public class CountryController : Controller
     {
         private IWorldRepository worldRepository;
-        private IHostingEnvironment environment;
+        private IFlagUploader flagUploader;
 
-        public CountryController(IWorldRepository worldRepository, IHostingEnvironment environment)
+        public CountryController(IWorldRepository worldRepository, IFlagUploader flagUploader)
         {
             this.worldRepository = worldRepository;
-            this.environment = environment;
+            this.flagUploader = flagUploader;
         }
 
         public IActionResult Index()
@@ -45,27 +39,30 @@ namespace GlobalCityManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                country.NationalFlag = CreateFlag(country.Code, nationalFlagFile);
+                country.NationalFlag = flagUploader.CreateFlag(country.Code, nationalFlagFile);
                 worldRepository.CreateCountry(country);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        private string CreateFlag(string code, IFormFile nationalFlagFile)
+        [HttpGet]
+        public IActionResult Edit(string code)
         {
-            string relativePath = string.Empty;
-            if (nationalFlagFile?.Length > 0)
+            var country = worldRepository.GetCountryDetails(code);
+            return View(country);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Country country, IFormFile nationalFlagFile)
+        {
+            if (ModelState.IsValid)
             {
-                var targetFileName = $"{code}{Path.GetExtension(nationalFlagFile.FileName)}";
-                relativePath = Path.Combine("images", targetFileName);
-                var absolutePath = Path.Combine(environment.WebRootPath, relativePath);
-                using (var stream = new FileStream(absolutePath, FileMode.Create))
-                {
-                    nationalFlagFile.CopyTo(stream);
-                }
+                country.NationalFlag = flagUploader.CreateFlag(country.Code, nationalFlagFile);
+                worldRepository.UpdateCountry(country);
             }
-            return relativePath;
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

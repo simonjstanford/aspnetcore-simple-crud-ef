@@ -4,11 +4,11 @@
     Layout = null;
 }
 
-<h2>Create Country</h2>
+<h2>Edit @Model.Name</h2>
 
 @using (Html.BeginForm(FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
 {
-    @Html.LabelFor(x => x.Code) @Html.TextBoxFor(x => x.Code) <br />
+    @Html.HiddenFor(x => x.Code) <br />
     @Html.Partial("CountryDetails")
     <input type="submit" value="Submit" /> <br />
 }
