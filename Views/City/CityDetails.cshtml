@@ -1,0 +1,7 @@
+﻿@model GlobalCityManager.Models.CreateCityViewModel
+
+@Html.LabelFor(x => x.City.Name) @Html.TextBoxFor(x => x.City.Name) <br />
+@Html.LabelFor(x => x.City.CountryCodeNavigation) @Html.DropDownListFor(x => x.City.CountryCode, new SelectList(Model.AllCountries, "Code", "Name")) <br />
+@Html.LabelFor(x => x.City.District) @Html.TextBoxFor(x => x.City.District) <br />
+@Html.LabelFor(x => x.City.Population) @Html.TextBoxFor(x => x.City.Population) <br />
+

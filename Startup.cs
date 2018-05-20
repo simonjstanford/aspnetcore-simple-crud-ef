@@ -15,7 +15,8 @@ namespace MyWebApp
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.AddTransient<IWorldRepository, WorldRepository>();
+            services.AddTransient<ICountryRepository, CountryRepository>();
+            services.AddTransient<ICityRepository, CityRepository>();
             services.AddTransient<IFlagUploader, StoreLocalFlagUploader>();
             services.AddMvc();
         }

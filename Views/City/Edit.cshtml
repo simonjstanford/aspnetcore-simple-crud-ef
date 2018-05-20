@@ -1,0 +1,10 @@
+﻿@model GlobalCityManager.Models.CreateCityViewModel
+
+<h2>Edit @Model.City.Name</h2>
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.City.Id) <br />
+    @Html.Partial("CityDetails")
+    <input type="submit" value="Submit" /> <br />
+}

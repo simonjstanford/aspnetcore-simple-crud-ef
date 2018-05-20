@@ -1,5 +1,6 @@
 ﻿@model GlobalCityManager.Models.Country
 
+
 @{
     ViewData["Title"] = "Detail";
 }
@@ -12,14 +13,22 @@
     @Html.DisplayNameFor(x => x.Region): @Html.DisplayTextFor(x => x.Region) <br />
 </div>
 
-<img src="\@Model.NationalFlag"/>
+<img src="\@Model.NationalFlag" />
 
 <ul>
     @foreach (var city in Model.City)
     {
-        <li>@Html.ActionLink(city.Name, "Detail", "City")</li>
+        <li>@Html.ActionLink(city.Name, "Detail", "City", new { cityId = city.Id })</li>
     }
 </ul>
 
-@Html.ActionLink("Edit this country", "Edit", new { code = Model.Code })
+@Html.ActionLink("Edit this country", "Edit", new { code = Model.Code }) <br />
 
+@if (Model.City.Count == 0)
+{
+    @using (Html.BeginForm("Remove", "Country", FormMethod.Post))
+    {
+        @Html.HiddenFor(x => x.Code)
+        <input type="submit" value="Delete" />
+    }
+}

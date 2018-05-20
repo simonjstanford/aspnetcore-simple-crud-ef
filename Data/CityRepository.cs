@@ -5,49 +5,51 @@ using System.Linq;
 
 namespace GlobalCityManager.Data
 {
-    public class WorldRepository : IWorldRepository
+    public class CityRepository : ICityRepository
     {
         public IEnumerable<City> GetCities()
         {
             using (var context = new worldContext())
             {
-                return context.City.ToList();
+                return context.City.Include(x => x.CountryCodeNavigation).ToList();
             }
         }
 
-        public IEnumerable<Country> GetCountries()
+        public void CreateCity(City city)
         {
             using (var context = new worldContext())
             {
-                return context.Country.ToList();
-            }
-        }
-
-        public Country GetCountryDetails(string countryCode)
-        {
-            using (var context = new worldContext())
-            {
-
-                var countryQuery = context.Country.Include(db => db.City);
-                var details = countryQuery.SingleOrDefault(x => x.Code == countryCode);
-                return details;
-            }
-        }
-
-        public void CreateCountry(Country country)
-        {
-            using (var context = new worldContext())
-            {
-                context.Country.Add(country);
+                context.City.Add(city);
                 context.SaveChanges();
             }
         }
 
-        public void UpdateCountry(Country country)
+        public City GetCityDetails(int cityId)
         {
             using (var context = new worldContext())
             {
-                context.Country.Update(country);
+                var countryQuery = context.City.Include(db => db.CountryCodeNavigation);
+                var details = countryQuery.SingleOrDefault(x => x.Id == cityId);
+                return details;
+            }
+        }
+
+        public void UpdateCity(City city)
+        {
+            using (var context = new worldContext())
+            {
+                context.City.Update(city);
+                context.SaveChanges();
+            }
+        }
+
+        public void RemoveCityById(int id)
+        {
+            using (var context = new worldContext())
+            {
+                var cityToDelete = new City { Id = id };
+                context.City.Attach(cityToDelete);
+                context.City.Remove(cityToDelete);
                 context.SaveChanges();
             }
         }

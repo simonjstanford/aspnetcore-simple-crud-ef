@@ -1,0 +1,9 @@
+﻿@model GlobalCityManager.Models.CreateCityViewModel
+
+<h2>Create Country</h2>
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    @Html.Partial("CityDetails")
+    <input type="submit" value="Submit" /> <br />
+}

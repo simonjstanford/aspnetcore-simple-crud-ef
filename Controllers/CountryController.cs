@@ -7,25 +7,19 @@ namespace GlobalCityManager.Controllers
 {
     public class CountryController : Controller
     {
-        private IWorldRepository worldRepository;
+        private ICountryRepository countryRepository;
         private IFlagUploader flagUploader;
 
-        public CountryController(IWorldRepository worldRepository, IFlagUploader flagUploader)
+        public CountryController(ICountryRepository worldRepository, IFlagUploader flagUploader)
         {
-            this.worldRepository = worldRepository;
+            this.countryRepository = worldRepository;
             this.flagUploader = flagUploader;
         }
 
         public IActionResult Index()
         {
-            var countries = worldRepository.GetCountries();
+            var countries = countryRepository.GetCountries();
             return View(countries);
-        }
-
-        public IActionResult Detail(string code)
-        {
-            var country = worldRepository.GetCountryDetails(code);
-            return View(country);
         }
 
         [HttpGet]
@@ -40,16 +34,22 @@ namespace GlobalCityManager.Controllers
             if (ModelState.IsValid)
             {
                 country.NationalFlag = flagUploader.CreateFlag(country.Code, nationalFlagFile);
-                worldRepository.CreateCountry(country);
+                countryRepository.CreateCountry(country);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Detail(string code)
+        {
+            var country = countryRepository.GetCountryDetails(code);
+            return View(country);
+        }
+
         [HttpGet]
         public IActionResult Edit(string code)
         {
-            var country = worldRepository.GetCountryDetails(code);
+            var country = countryRepository.GetCountryDetails(code);
             return View(country);
         }
 
@@ -58,10 +58,18 @@ namespace GlobalCityManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                country.NationalFlag = flagUploader.CreateFlag(country.Code, nationalFlagFile);
-                worldRepository.UpdateCountry(country);
+                if (nationalFlagFile != null)
+                    country.NationalFlag = flagUploader.CreateFlag(country.Code, nationalFlagFile);
+                countryRepository.UpdateCountry(country);
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult Remove(Country country)
+        {
+            countryRepository.RemoveCountryByCode(country.Code);
             return RedirectToAction(nameof(Index));
         }
     }

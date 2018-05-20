@@ -9,6 +9,7 @@
 @using (Html.BeginForm(FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(x => x.Code) <br />
+    @Html.HiddenFor(x => x.NationalFlag) <br />
     @Html.Partial("CountryDetails")
     <input type="submit" value="Submit" /> <br />
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,6 +25,7 @@ namespace GlobalCityManager.Models
 
         [ForeignKey("CountryCode")]
         [InverseProperty("City")]
+        [DisplayName("Country")]
         public Country CountryCodeNavigation { get; set; }
     }
 }

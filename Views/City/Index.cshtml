@@ -1,0 +1,31 @@
+﻿@model List<GlobalCityManager.Models.City>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>All Cities</h2>
+
+@Html.ActionLink("Create City!", "Create")
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Country</th>
+        <th>District</th>
+        <th>Population</th>
+    </tr>
+
+    @foreach (var city in Model)
+    {
+    <tr>
+        <td>
+            @Html.ActionLink(city.Name, "Detail", "City", new { cityId = city.Id })
+        </td>
+        <td>@Html.ActionLink(city.CountryCodeNavigation?.Name, "Detail", "Country", new { code = city.CountryCodeNavigation?.Code })</td>
+        <td>@city.District</td>
+        <td>@city.Population</td>
+    </tr>
+    }
+</table>
+

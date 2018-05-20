@@ -1,0 +1,22 @@
+﻿@model GlobalCityManager.Models.City
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h2>Details for @Model.Name</h2>
+
+<div>
+    @Html.DisplayNameFor(x => x.District): @Html.DisplayTextFor(x => x.District) <br />
+    @Html.DisplayNameFor(x => x.Population): @Html.DisplayTextFor(x => x.Population) <br />
+    @Html.DisplayNameFor(x => x.CountryCodeNavigation.Name): @Html.ActionLink(Html.DisplayTextFor(x => x.CountryCodeNavigation.Name), "Detail", "Country", new { code = Model.CountryCode }) <br />
+</div>
+<br />
+
+@Html.ActionLink("Edit this city", "Edit", new { cityId = Model.Id }) <br />
+
+@using (Html.BeginForm("Remove", "City", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.Id)
+    <input type="submit" value="Delete" />
+}
