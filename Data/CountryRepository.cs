@@ -1,58 +1,67 @@
 ﻿using GlobalCityManager.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace GlobalCityManager.Data
 {
     public class CountryRepository : ICountryRepository
     {
-        public IEnumerable<Country> GetCountries()
+        public async Task<IEnumerable<Country>> GetCountriesAsync()
         {
             using (var context = new worldContext())
             {
-                return context.Country.ToList();
+                return await context.Country.ToListAsync();
             }
         }
 
-        public Country GetCountryDetails(string countryCode)
+        public async Task<Country> GetCountryDetailsAsync(string countryCode)
         {
             using (var context = new worldContext())
             {
 
                 var countryQuery = context.Country.Include(db => db.City);
-                var details = countryQuery.SingleOrDefault(x => x.Code == countryCode);
+                var details = await countryQuery.SingleOrDefaultAsync(x => x.Code == countryCode);
                 return details;
             }
         }
 
-        public void CreateCountry(Country country)
+        public async Task CreateCountryAsync(Country country)
         {
-            using (var context = new worldContext())
+            await Task.Run(() =>
             {
-                context.Country.Add(country);
-                context.SaveChanges();
-            }
+                using (var context = new worldContext())
+                {
+                    context.Country.Add(country);
+                    context.SaveChanges();
+                }
+            });
         }
 
-        public void UpdateCountry(Country country)
+        public async Task UpdateCountryAsync(Country country)
         {
-            using (var context = new worldContext())
+            await Task.Run(() =>
             {
-                context.Country.Update(country);
-                context.SaveChanges();
-            }
+                using (var context = new worldContext())
+                {
+                    context.Country.Update(country);
+                    context.SaveChanges();
+                }
+            });
         }
 
-        public void RemoveCountryByCode(string code)
+        public async Task RemoveCountryByCodeAsync(string code)
         {
-            using (var context = new worldContext())
+            await Task.Run(() =>
             {
-                var countryToDelete = new Country { Code = code };
-                context.Country.Attach(countryToDelete);
-                context.Country.Remove(countryToDelete);
-                context.SaveChanges();
-            }
+                using (var context = new worldContext())
+                {
+                    var countryToDelete = new Country { Code = code };
+                    context.Country.Attach(countryToDelete);
+                    context.Country.Remove(countryToDelete);
+                    context.SaveChanges();
+                }
+            });
         }
     }
 }

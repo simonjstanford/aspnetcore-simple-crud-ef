@@ -2,6 +2,7 @@
 using GlobalCityManager.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GlobalCityManager.Controllers
 {
@@ -10,15 +11,15 @@ namespace GlobalCityManager.Controllers
         private ICountryRepository countryRepository;
         private IFlagUploader flagUploader;
 
-        public CountryController(ICountryRepository worldRepository, IFlagUploader flagUploader)
+        public CountryController(ICountryRepository countryRepository, IFlagUploader flagUploader)
         {
-            this.countryRepository = worldRepository;
+            this.countryRepository = countryRepository;
             this.flagUploader = flagUploader;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var countries = countryRepository.GetCountries();
+            var countries = await countryRepository.GetCountriesAsync();
             return View(countries);
         }
 
@@ -29,47 +30,47 @@ namespace GlobalCityManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Country country, IFormFile nationalFlagFile)
+        public async Task<IActionResult> Create(Country country, IFormFile nationalFlagFile)
         {
             if (ModelState.IsValid)
             {
                 country.NationalFlag = flagUploader.CreateFlag(country.Code, nationalFlagFile);
-                countryRepository.CreateCountry(country);
+                await countryRepository.CreateCountryAsync(country);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Detail(string code)
+        public async Task<IActionResult> Detail(string code)
         {
-            var country = countryRepository.GetCountryDetails(code);
+            var country = await countryRepository.GetCountryDetailsAsync(code);
             return View(country);
         }
 
         [HttpGet]
-        public IActionResult Edit(string code)
+        public async Task<IActionResult> Edit(string code)
         {
-            var country = countryRepository.GetCountryDetails(code);
+            var country = await countryRepository.GetCountryDetailsAsync(code);
             return View(country);
         }
 
         [HttpPost]
-        public IActionResult Edit(Country country, IFormFile nationalFlagFile)
+        public async Task<IActionResult> Edit(Country country, IFormFile nationalFlagFile)
         {
             if (ModelState.IsValid)
             {
                 if (nationalFlagFile != null)
                     country.NationalFlag = flagUploader.CreateFlag(country.Code, nationalFlagFile);
-                countryRepository.UpdateCountry(country);
+                await countryRepository.UpdateCountryAsync(country);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public IActionResult Remove(Country country)
+        public async Task<IActionResult> Remove(Country country)
         {
-            countryRepository.RemoveCountryByCode(country.Code);
+            await countryRepository.RemoveCountryByCodeAsync(country.Code);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -9,7 +9,7 @@
 <div>
     @Html.DisplayNameFor(x => x.District): @Html.DisplayTextFor(x => x.District) <br />
     @Html.DisplayNameFor(x => x.Population): @Html.DisplayTextFor(x => x.Population) <br />
-    @Html.DisplayNameFor(x => x.CountryCodeNavigation.Name): @Html.ActionLink(Html.DisplayTextFor(x => x.CountryCodeNavigation.Name), "Detail", "Country", new { code = Model.CountryCode }) <br />
+    @Html.DisplayNameFor(x => x.CountryCodeNavigation): @Html.ActionLink(Html.DisplayTextFor(x => x.CountryCodeNavigation.Name), "Detail", "Country", new { code = Model.CountryCode }) <br />
 </div>
 <br />
 

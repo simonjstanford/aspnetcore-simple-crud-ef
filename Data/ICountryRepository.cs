@@ -1,14 +1,15 @@
 ﻿using GlobalCityManager.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GlobalCityManager.Data
 {
     public interface ICountryRepository
     {
-        IEnumerable<Country> GetCountries();
-        Country GetCountryDetails(string code);
-        void CreateCountry(Country country);
-        void UpdateCountry(Country country);
-        void RemoveCountryByCode(string code);
+        Task<IEnumerable<Country>> GetCountriesAsync();
+        Task<Country> GetCountryDetailsAsync(string code);
+        Task CreateCountryAsync(Country country);
+        Task UpdateCountryAsync(Country country);
+        Task RemoveCountryByCodeAsync(string code);
     }
 }

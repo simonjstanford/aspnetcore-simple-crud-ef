@@ -2,56 +2,63 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GlobalCityManager.Data
 {
     public class CityRepository : ICityRepository
     {
-        public IEnumerable<City> GetCities()
+        public async Task<IEnumerable<City>> GetCitiesAsync()
         {
             using (var context = new worldContext())
             {
-                return context.City.Include(x => x.CountryCodeNavigation).ToList();
+                return await context.City.Include(x => x.CountryCodeNavigation).ToListAsync();
             }
         }
 
-        public void CreateCity(City city)
+        public async Task CreateCityAsync(City city)
         {
             using (var context = new worldContext())
             {
-                context.City.Add(city);
+                await context.City.AddAsync(city);
                 context.SaveChanges();
             }
         }
 
-        public City GetCityDetails(int cityId)
+        public async Task<City> GetCityDetailsAsync(int cityId)
         {
             using (var context = new worldContext())
             {
                 var countryQuery = context.City.Include(db => db.CountryCodeNavigation);
-                var details = countryQuery.SingleOrDefault(x => x.Id == cityId);
+                var details = await countryQuery.SingleOrDefaultAsync(x => x.Id == cityId);
                 return details;
             }
         }
 
-        public void UpdateCity(City city)
+        public async Task UpdateCityAsync(City city)
         {
-            using (var context = new worldContext())
-            {
-                context.City.Update(city);
-                context.SaveChanges();
-            }
+            await Task.Run(() => 
+            { 
+                using (var context = new worldContext())
+                {
+                    context.City.Update(city);
+                    context.SaveChanges();
+                }
+            });
         }
 
-        public void RemoveCityById(int id)
+        public async Task RemoveCityByIdAsync(int id)
         {
-            using (var context = new worldContext())
+            await Task.Run(() =>
             {
-                var cityToDelete = new City { Id = id };
-                context.City.Attach(cityToDelete);
-                context.City.Remove(cityToDelete);
-                context.SaveChanges();
-            }
+                using (var context = new worldContext())
+                {
+                    var cityToDelete = new City { Id = id };
+                    context.City.Attach(cityToDelete);
+                    context.City.Remove(cityToDelete);
+                    context.SaveChanges();
+                }
+            });
         }
     }
 }

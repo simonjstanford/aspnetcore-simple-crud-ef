@@ -1,6 +1,7 @@
 ﻿using GlobalCityManager.Data;
 using GlobalCityManager.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace GlobalCityManager.Controllers
 {
@@ -15,62 +16,62 @@ namespace GlobalCityManager.Controllers
             this.countryRepository = countryRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cities = cityRepository.GetCities();
+            var cities = await cityRepository.GetCitiesAsync();
             return View(cities);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var vm = new CreateCityViewModel();
-            vm.AllCountries = countryRepository.GetCountries();
+            vm.AllCountries = await countryRepository.GetCountriesAsync();
             return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Create(CreateCityViewModel createCityViewModel)
+        public async Task<IActionResult> Create(CreateCityViewModel createCityViewModel)
         {
             if (ModelState.IsValid)
             {
-                cityRepository.CreateCity(createCityViewModel.City);
+                await cityRepository.CreateCityAsync(createCityViewModel.City);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Detail(int cityId)
+        public async Task<IActionResult> Detail(int cityId)
         {
-            var city = cityRepository.GetCityDetails(cityId);
+            var city = await cityRepository.GetCityDetailsAsync(cityId);
             return View(city);
         }
 
         [HttpGet]
-        public IActionResult Edit(int cityId)
+        public async Task<IActionResult> Edit(int cityId)
         {
             var vm = new CreateCityViewModel();
-            vm.City = cityRepository.GetCityDetails(cityId);
-            vm.AllCountries = countryRepository.GetCountries();
+            vm.City = await cityRepository.GetCityDetailsAsync(cityId);
+            vm.AllCountries = await countryRepository.GetCountriesAsync();
             return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Edit(City city)
+        public async Task<IActionResult> Edit(City city)
         {
             if (ModelState.IsValid)
             {
-                cityRepository.UpdateCity(city);
+                await cityRepository.UpdateCityAsync(city);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public IActionResult Remove(City city)
+        public async Task<IActionResult> Remove(City city)
         {
-            cityRepository.RemoveCityById(city.Id);
+            await cityRepository.RemoveCityByIdAsync(city.Id);
             return RedirectToAction(nameof(Index));
         }
     }
